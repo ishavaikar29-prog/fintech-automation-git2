@@ -43,3 +43,19 @@ jobs:
             daily_report.xlsx
             error.log
           if-no-files-found: ignore
+
+      - name: Upload Excel Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: excel-file
+          path: report.xlsx
+          if-no-files-found: warn
+
+      - name: Upload Error Log Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-log
+          path: logs/error.log
+          if-no-files-found: ignore
