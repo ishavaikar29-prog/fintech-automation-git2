@@ -1,0 +1,45 @@
+name: Daily Report
+
+on:
+  schedule:
+    # daily at 01:00 IST -> 19:30 UTC previous day
+    - cron: "30 19 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run parent script
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+          API_KEY: ${{ secrets.API_KEY }}
+          API_TXN: ${{ secrets.API_TXN }}
+          API_SCORE: ${{ secrets.API_SCORE }}
+          API_DAILY: ${{ secrets.API_DAILY }}
+        run: |
+          python report_parent.py
+
+      - name: Upload artifacts (excel + logs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-artifacts
+          path: |
+            daily_report.xlsx
+            error.log
+          if-no-files-found: ignore
