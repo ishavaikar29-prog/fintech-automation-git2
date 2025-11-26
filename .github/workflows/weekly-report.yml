@@ -3,7 +3,7 @@ name: Weekly Report (Saturday)
 on:
   schedule:
     # Saturday 18:00 IST -> 12:30 UTC Saturday
-    - cron: "30 12 * * SAT"
+    - cron: "30 7 * * WED"
   workflow_dispatch:
 
 jobs:
