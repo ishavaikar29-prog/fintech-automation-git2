@@ -3,7 +3,7 @@ name: Daily Report
 on:
   schedule:
     # daily at 01:00 IST -> 19:30 UTC previous day
-    - cron: "30 19 * * *"
+    - cron: "30 8 * * *"
   workflow_dispatch:
 
 jobs:
